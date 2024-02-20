@@ -11,4 +11,8 @@ public class Regression{
     private static void nonlinear(String[] args) {
 
     }
+
+    private static void test(String[] args) {
+
+    }
 }
