@@ -4,7 +4,7 @@ public class Regression{
         System.out.print("Team member: Gabriel Ngai");
     }
 
-    private static void linear(String[] args) {
+    private static void linear(String[] args) { System.out.print("Team member: Kellen Gerla");
 
     }
 
