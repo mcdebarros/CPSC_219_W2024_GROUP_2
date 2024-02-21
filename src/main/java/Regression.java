@@ -5,7 +5,7 @@ public class Regression{
     }
 
     private static void linear(String[] args) {
-        System.out.println("kellen gerla");
+        System.out.println("kellen");
 
     }
 
