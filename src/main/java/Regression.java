@@ -6,7 +6,6 @@ public class Regression{
 
     private static void linear(String[] args) {
         System.out.println("Team member: Kellen Gerla");
-        System.out.println("I think this works?");
 
     }
 
