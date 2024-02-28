@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Regression {
 
-    float[][] dataMatrix;
     public static void main(String[] args) {
         if (args.length != 1) {
             if (args.length < 1) {
@@ -26,7 +25,7 @@ public class Regression {
                     while (dataLine != null) {
                         dataLines[i] = dataLine;
                         dataLine = buffedData.readLine();
-                        i++; //BEtter way?
+                        i++; //Better way?
                     }
                 } catch (FileNotFoundException e) {
                     System.err.println("Whoops! Can't find the file. Check and try again.");
@@ -34,12 +33,14 @@ public class Regression {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-
+            } else {
+                System.err.println("Cannot read file!");
             }
         }
 
     }
     private static void linear(String[] args) {
+
     }
 
     /**
