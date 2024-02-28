@@ -1,10 +1,14 @@
 import java.io.*;
 import java.lang.reflect.Array;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Regression {
 
     public static void main(String[] args) {
+        ArrayList<String> dataLines = new ArrayList<>();
+        String[] headers = new String[2];
         if (args.length != 1) {
             if (args.length < 1) {
                 System.out.println("No arguments passed; please specify a filename.");
@@ -15,7 +19,6 @@ public class Regression {
             }
         } else {
             File dataFile = new File(args[0]);
-            String[] dataLines = new String[1];
             if (dataFile.exists() && dataFile.canRead() && dataFile.isFile()) {
                 try {
                     FileReader readData = new FileReader(dataFile);
@@ -23,7 +26,7 @@ public class Regression {
                     String dataLine = buffedData.readLine();
                     int i = 0;
                     while (dataLine != null) {
-                        dataLines[i] = dataLine;
+                        dataLines.add(i,dataLine);
                         dataLine = buffedData.readLine();
                         i++; //Better way?
                     }
@@ -35,12 +38,65 @@ public class Regression {
                 }
             } else {
                 System.err.println("Cannot read file!");
+                System.exit(4);
             }
         }
+        boolean hasHeader = false;
+        hasHeader = containsHeaders(dataLines.getFirst());
+        Double[][] dataMatrix = new Double[dataLines.size()][2];
+        if (!hasHeader)
+            for (int i = 0; i < dataLines.size(); i++) {
+                if (!(dataLines.get(i)).isEmpty()) {
+                    try {
+                        String[] lineContent = (dataLines.get(i)).split("\t", -1);
+                        if (lineContent.length != 2) {
+                            System.err.println("Too many data points encountered on line " + (i + 1) + ", check data file and try again!");
+                            System.exit(5);
+                        } else {
+                            dataMatrix[i][0] = Double.parseDouble(lineContent[0]);
+                            dataMatrix[i][1] = Double.parseDouble(lineContent[1]);
+                        }
+                    } catch (NumberFormatException e) {
+                        System.err.println("Something's fishy at line " + (i + 1) + ", check data and try again!");
+                        System.exit(6);
+                    }
+                }
+            }
+        else {
+            for (int i = 1; i < dataLines.size(); i++) {
+                if (!(dataLines.get(i)).isEmpty()) {
+                    try {
+                        String[] lineContent = (dataLines.get(i)).split("\t", -1);
+                        if (lineContent.length != 2) {
+                            System.err.println("Too many data points encountered on line " + (i + 1) + ", check data file and try again!");
+                            System.exit(5);
+                        } else {
+                            dataMatrix[i][0] = Double.parseDouble(lineContent[0]);
+                            dataMatrix[i][1] = Double.parseDouble(lineContent[1]);
+                        }
+                    } catch (NumberFormatException e) {
+                        System.err.println("Something's fishy at line " + (i + 1) + ", check data and try again!");
+                        System.exit(6);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void linear(Double[][] data) {
 
     }
-    private static void linear(String[] args) {
-
+    private static boolean containsHeaders(String line) {
+        String[] parts = line.split("\t");
+        for (String part : parts) {
+            try {
+                Double.parseDouble(part); // Try to parse each part as a double
+                return false; // If successful, it's not a header
+            } catch (NumberFormatException e) {
+                // If parsing fails, it's likely a header
+            }
+        }
+        return true; // If all parts couldn't be parsed as double, it's likely headers
     }
 
     /**
