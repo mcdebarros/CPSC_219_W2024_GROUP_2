@@ -1,22 +1,45 @@
+import java.io.*;
 import java.lang.reflect.Array;
+import java.util.Scanner;
 
 public class Regression {
 
-
+    float[][] dataMatrix;
     public static void main(String[] args) {
-        displayHelpMessage();
-        System.out.print("Team member: Gabriel Ngai");
-    }
+        if (args.length != 1) {
+            if (args.length < 1) {
+                System.out.println("No arguments passed; please specify a filename.");
+                System.exit(1);
+            } else {
+                System.out.println("Too many arguments! Pass only 1.");
+                System.exit(2);
+            }
+        } else {
+            File dataFile = new File(args[0]);
+            String[] dataLines = new String[1];
+            if (dataFile.exists() && dataFile.canRead() && dataFile.isFile()) {
+                try {
+                    FileReader readData = new FileReader(dataFile);
+                    BufferedReader buffedData = new BufferedReader(readData);
+                    String dataLine = buffedData.readLine();
+                    int i = 0;
+                    while (dataLine != null) {
+                        dataLines[i] = dataLine;
+                        dataLine = buffedData.readLine();
+                        i++;
+                    }
+                } catch (FileNotFoundException e) {
+                    System.err.println("Whoops! Can't find the file. Check and try again.");
+                    System.exit(3); //Come back to this later; Need better exceptions.
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 
+            }
+        }
+
+    }
     private static void linear(String[] args) {
-    }
-
-    private static void nonlinear(String[] args) {
-
-    }
-
-    private static void test(String[] args) {
-
     }
 
     /**
