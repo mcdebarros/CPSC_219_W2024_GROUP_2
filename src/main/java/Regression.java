@@ -9,13 +9,18 @@ public class Regression {
     public static void main(String[] args) {
         ArrayList<String> dataLines = new ArrayList<>();
         String[] headers = new String[2];
+        int order;
         if (args.length != 1) {
             if (args.length < 1) {
                 System.out.println("No arguments passed; please specify a filename.");
                 System.exit(1);
             } else {
-                System.out.println("Too many arguments! Pass only 1.");
-                System.exit(2);
+                try {
+                    order = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    System.err.println("Order given is not an integer!");
+                    System.exit(7);
+                }
             }
         } else {
             File dataFile = new File(args[0]);
@@ -44,7 +49,7 @@ public class Regression {
         boolean hasHeader = false;
         hasHeader = containsHeaders(dataLines.getFirst());
         Double[][] dataMatrix = new Double[dataLines.size()][2];
-        if (!hasHeader)
+        if (!hasHeader) {
             for (int i = 0; i < dataLines.size(); i++) {
                 if (!(dataLines.get(i)).isEmpty()) {
                     try {
@@ -62,7 +67,7 @@ public class Regression {
                     }
                 }
             }
-        else {
+        } else {
             for (int i = 1; i < dataLines.size(); i++) {
                 if (!(dataLines.get(i)).isEmpty()) {
                     try {
@@ -83,8 +88,15 @@ public class Regression {
         }
     }
 
-    private static void linear(Double[][] data) {
-
+    private static void linear(Double[][] data, int order) {
+        Double[][] z = new Double[data[0].length][order + 1];
+        Double[] y = data[1];
+        for (int i = 0; i < data[0].length; i++) {
+            for (int j = 0; j < order; j++) {
+                z[i][order - j] = Math.pow(data[i][0],(order - j));
+            }
+        }
+        Double[][] zT = transposeMatrix(z);
     }
     private static boolean containsHeaders(String line) {
         String[] parts = line.split("\t");
@@ -120,11 +132,11 @@ public class Regression {
      * @param matrixToTranspose is an integer 2D array
      * @return the transposed matrix
      */
-    static int[][] transposeMatrix(int[][] matrixToTranspose) {
+    static Double[][] transposeMatrix(Double[][] matrixToTranspose) {
         int y = Array.getLength(matrixToTranspose);
         int x = Array.getLength(matrixToTranspose[0]);
         System.out.println(y + " " + x);
-        int[][] transposedMatrix = new int[x][y];
+        Double[][] transposedMatrix = new Double[x][y];
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 transposedMatrix[i][j] = matrixToTranspose[j][i];
