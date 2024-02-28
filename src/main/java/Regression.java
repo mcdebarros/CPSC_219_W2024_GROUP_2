@@ -26,7 +26,7 @@ public class Regression {
                     while (dataLine != null) {
                         dataLines[i] = dataLine;
                         dataLine = buffedData.readLine();
-                        i++;
+                        i++; //BEtter way?
                     }
                 } catch (FileNotFoundException e) {
                     System.err.println("Whoops! Can't find the file. Check and try again.");
