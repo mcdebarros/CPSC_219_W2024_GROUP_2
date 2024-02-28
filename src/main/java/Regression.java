@@ -2,7 +2,9 @@ import java.lang.reflect.Array;
 
 public class Regression {
 
+
     public static void main(String[] args) {
+        displayHelpMessage();
         System.out.print("Team member: Gabriel Ngai");
     }
 
