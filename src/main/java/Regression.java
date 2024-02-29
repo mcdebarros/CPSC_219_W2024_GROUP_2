@@ -9,7 +9,7 @@ public class Regression {
     public static void main(String[] args) {
         ArrayList<String> dataLines = new ArrayList<>();
         String[] headers = new String[2];
-        int order;
+        int order = 1;
         if (args.length != 1) {
             if (args.length < 1) {
                 System.out.println("No arguments passed; please specify a filename.");
@@ -86,17 +86,24 @@ public class Regression {
                 }
             }
         }
+        Double[] a = linear(dataMatrix, order);
     }
 
-    private static void linear(Double[][] data, int order) {
-        Double[][] z = new Double[data[0].length][order + 1];
-        Double[] y = data[1];
+    private static Double[] linear(Double[][] data, int order) {
+        Double[][] z = new Double[data.length][order + 1];
+        Double[][] y = new Double[data.length][1];
+        for (int i = 0; i < data.length; i++) {
+            y[i][0] = data[i][1];
+        }
         for (int i = 0; i < data[0].length; i++) {
             for (int j = 0; j < order; j++) {
                 z[i][order - j] = Math.pow(data[i][0],(order - j));
             }
         }
         Double[][] zT = transposeMatrix(z);
+        Double[][] zTz = multMatrix(zT,z);
+        Double[][] zTy = multMatrix(zT,y);
+
     }
     private static boolean containsHeaders(String line) {
         String[] parts = line.split("\t");
@@ -145,4 +152,26 @@ public class Regression {
         return transposedMatrix;
     }
 
+    private static Double[][] multMatrix(Double[][] a, Double[][] b) {
+        int rowsA = a.length;
+        int rowsB = b.length;
+        int colsA = a[0].length;
+        int colsB = b[0].length;
+        Double[][] c = new Double[rowsA][colsB];
+        if (colsA != rowsB) {
+            System.err.println("Incompatible matrix dimensions!");
+            System.exit(8);
+        } else {
+            for (int i = 0; i < rowsA; i++) {
+                for (int j = 0; j < colsB; j++) {
+                    double entry = 0.0;
+                    for (int n = 0; n < colsA; n++) {
+                        entry += a[i][n] * b[n][j];
+                    }
+                    c[i][j] = entry;
+                }
+            }
+        }
+        return c;
+    }
 }
