@@ -106,6 +106,7 @@ public class Regression {
         Double[][] zTInv = invert(zTz);
         Double[][] a =
 
+        return new Double[0];
     }
     private static boolean containsHeaders(String line) {
         String[] parts = line.split("\t");
