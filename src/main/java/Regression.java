@@ -104,6 +104,7 @@ public class Regression {
         Double[][] zTz = multMatrix(zT,z);
         Double[][] zTy = multMatrix(zT,y);
 
+        return new Double[0];
     }
     private static boolean containsHeaders(String line) {
         String[] parts = line.split("\t");
