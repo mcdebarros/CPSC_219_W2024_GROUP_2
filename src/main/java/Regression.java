@@ -1,14 +1,13 @@
 import java.io.*;
 import java.lang.reflect.Array;
-import java.util.HashSet;
-import java.util.Scanner;
 import java.util.ArrayList;
+
+import static java.lang.StringTemplate.STR;
 
 public class Regression {
 
     public static void main(String[] args) {
         ArrayList<String> dataLines = new ArrayList<>();
-        String[] headers = new String[2];
         int order = 1;
         if (args.length != 1) {
             if (args.length < 1) {
@@ -46,7 +45,7 @@ public class Regression {
                 System.exit(4);
             }
         }
-        boolean hasHeader = false;
+        boolean hasHeader;
         hasHeader = containsHeaders(dataLines.getFirst());
         Double[][] dataMatrix = new Double[dataLines.size()][2];
         if (!hasHeader) {
@@ -87,9 +86,35 @@ public class Regression {
             }
         }
         Double[][] a = linear(dataMatrix, order);
+        File coefficients = new File("coefficients.txt");
+        if (!coefficients.exists()) {
+            try {
+                coefficients.createNewFile();
+            } catch (IOException e) {
+                System.err.println("Trouble writing to file! Check location and do not interrupt.");
+                System.exit(9);
+            }
+        }
+        if (coefficients.exists() && coefficients.isFile() && coefficients.canWrite()) {
+            try {
+                FileWriter aWrite = new FileWriter(coefficients);
+                BufferedWriter aBuffed = new BufferedWriter(aWrite);
+                for (int i = 0; i < a.length; i++) {
+                    String coefIndex = STR."a\{i}";
+                    aBuffed.write(STR."\{coefIndex}\t\{a[i][0]}\n");
+                }
+                aBuffed.flush();
+                aBuffed.close();
+            } catch (IOException e) {
+                System.err.println("Oops! Couldn't write to the file.");
+            }
+        } else {
+            System.err.println("Cannot access file to write to!");
+            System.exit(11);
+        }
     }
 
-    private static Double[][] linear(Double[][] data, int order) {
+    public static Double[][] linear(Double[][] data, int order) {
         Double[][] z = new Double[data.length][order + 1];
         Double[][] y = new Double[data.length][1];
         for (int i = 0; i < data.length; i++) {
@@ -107,7 +132,7 @@ public class Regression {
 
         return multMatrix(zTzInv,zTy);
     }
-    private static boolean containsHeaders(String line) {
+    public static boolean containsHeaders(String line) {
         String[] parts = line.split("\t");
         for (String part : parts) {
             try {
@@ -123,7 +148,7 @@ public class Regression {
     /**
      * Displays an appropriate help message for the user
      */
-    private static void displayHelpMessage() {
+    public static void displayHelpMessage() {
         System.out.println("Welcome to the Linear Regression Model.");
         System.out.println("HOW THIS MODEL WORKS:");
         System.out.println("---------------------");
@@ -141,7 +166,7 @@ public class Regression {
      * @param matrixToTranspose is an integer 2D array
      * @return the transposed matrix
      */
-    static Double[][] transposeMatrix(Double[][] matrixToTranspose) {
+    public static Double[][] transposeMatrix(Double[][] matrixToTranspose) {
         int y = Array.getLength(matrixToTranspose);
         int x = Array.getLength(matrixToTranspose[0]);
         System.out.println(y + " " + x);
@@ -154,7 +179,7 @@ public class Regression {
         return transposedMatrix;
     }
 
-    private static Double[][] multMatrix(Double[][] a, Double[][] b) {
+    public static Double[][] multMatrix(Double[][] a, Double[][] b) {
         int rowsA = a.length;
         int rowsB = b.length;
         int colsA = a[0].length;
