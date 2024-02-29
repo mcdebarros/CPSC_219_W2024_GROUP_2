@@ -86,10 +86,10 @@ public class Regression {
                 }
             }
         }
-        Double[] a = linear(dataMatrix, order);
+        Double[][] a = linear(dataMatrix, order);
     }
 
-    private static Double[] linear(Double[][] data, int order) {
+    private static Double[][] linear(Double[][] data, int order) {
         Double[][] z = new Double[data.length][order + 1];
         Double[][] y = new Double[data.length][1];
         for (int i = 0; i < data.length; i++) {
@@ -103,10 +103,9 @@ public class Regression {
         Double[][] zT = transposeMatrix(z);
         Double[][] zTz = multMatrix(zT,z);
         Double[][] zTy = multMatrix(zT,y);
-        Double[][] zTInv = invert(zTz);
-        Double[][] a =
+        Double[][] zTzInv = invert(zTz);
 
-        return new Double[0];
+        return multMatrix(zTzInv,zTy);
     }
     private static boolean containsHeaders(String line) {
         String[] parts = line.split("\t");
