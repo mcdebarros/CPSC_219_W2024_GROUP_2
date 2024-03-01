@@ -18,7 +18,7 @@ public class Regression {
         System.out.println("Checking input arguments...");
         ArrayList<String> dataLines = new ArrayList<>(); //ArrayList of lines read from the data file
         int order = 1; //Initializes the model order
-        if (args.length < 1) { //Terminates the program if no arguments are passed
+        if (args.length < 2) { //Terminates the program if no arguments are passed
             intro();
             System.exit(1);
         } else {
@@ -233,7 +233,7 @@ public class Regression {
                 systems and producing text-based output; we hope that in future versions, it will handle non-linear systems and produce graphical
                 outputs.
                 
-                If you're seeing this message, it's because you tried to boot the program without passing any arguments; hopefully you know what
+                If you're seeing this message, it's because you tried to boot the program without passing enough arguments; hopefully you know what
                 you need to use this program properly now!""");
     }
 
