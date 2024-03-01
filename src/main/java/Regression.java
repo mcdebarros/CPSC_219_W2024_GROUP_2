@@ -106,6 +106,7 @@ public class Regression {
         String toWrite = (input.nextLine()).toUpperCase();
         while (!(toWrite.equals("Y") || toWrite.equals("N"))) {
             System.out.println("Oops! I didn't understand your input. Would you like to write to a file? (Y/N)");
+            toWrite = (input.nextLine()).toUpperCase(); // Update toWrite inside the loop
         }
         if (toWrite.equals("Y")) {
             File coefficients = new File("coefficients.txt"); //Initialize a txt file to store model outputs
