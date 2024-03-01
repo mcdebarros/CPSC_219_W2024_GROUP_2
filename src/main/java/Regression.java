@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import static java.lang.StringTemplate.STR;
+import java.util.Scanner;
 
 //Initialize Regression class
 public class Regression {
@@ -13,6 +14,8 @@ public class Regression {
      * @param args String array of length 2; entry 0 should contain the datafile path; entry 1 should contain the desired model order
      */
     public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Checking input arguments...");
         ArrayList<String> dataLines = new ArrayList<>(); //ArrayList of lines read from the data file
         int order = 1; //Initializes the model order
         if (args.length < 1) { //Terminates the program if no arguments are passed
@@ -26,6 +29,7 @@ public class Regression {
                 System.exit(7);
             }
         }
+        System.out.println("Successfully interpreted input arguments!\nHandling file...");
         File dataFile = new File(args[0]); //Initializes the data file
         if (dataFile.exists() && dataFile.canRead() && dataFile.isFile()) { //Check if data file exists, is a file, and is readable
             try {
@@ -48,6 +52,7 @@ public class Regression {
             System.err.println("Cannot read file!");
             System.exit(4);
         }
+        System.out.println("Successfully read the data file!\nHandling input data...");
         Double[][] dataMatrix; //Declare the two-dimensional data array
         boolean hasHeader = containsHeaders(dataLines.getFirst()); //Check to see if the data contains headers
         if (!hasHeader) { //Case for no headers
@@ -87,36 +92,53 @@ public class Regression {
                 }
             }
         }
+        System.out.println("Data extracted!\nGenerating model...");
         List<Object> model = linear(dataMatrix, order); //Retrieve model outputs based on data an order
         Double[][] a = (Double[][]) model.getFirst(); //Assign outputs to respective variables
         Double phi = (Double) model.get(1); //Assign outputs to respective variables
         Double rsq = (Double) model.get(2); //Assign outputs to respective variables
-        File coefficients = new File("coefficients.txt"); //Initialize a txt file to store model outputs
-        if (!coefficients.exists()) { //Create a new output file if one does not already exist
-            try {
-                coefficients.createNewFile();
-            } catch (IOException e) { //Terminate the program if a new file cannot be created
-                System.err.println("Trouble writing to file! Check location and do not interrupt.");
-                System.exit(9);
-            }
+        System.out.println("Model created successfully! Here it is;\n\n");
+        for (int i = 0; i < a.length; i++) {
+            String coefIndex = STR."a\{i}";
+            System.out.println(STR."\{coefIndex}\t\{a[i][0]}");
         }
-        if (coefficients.exists() && coefficients.isFile() && coefficients.canWrite()) { //Check file existence, writeability, and file-ness
-            try {
-                FileWriter aWrite = new FileWriter(coefficients); //Initialize file writer
-                BufferedWriter aBuffed = new BufferedWriter(aWrite); //Initialized buffered writer
-                for (int i = 0; i < a.length; i++) { //For each coefficient, write a new line containing the order of the coefficient and its value, separated by a tab
-                    String coefIndex = STR."a\{i}";
-                    aBuffed.write(STR."\{coefIndex}\t\{a[i][0]}\n");
+        System.out.println(STR."\nphi\t\{phi}\nRSQ\t\{rsq}\n\nWould you like to write these parameters to a file? (Y/N)");
+        String toWrite = (input.nextLine()).toUpperCase();
+        while (!(toWrite.equals("Y") || toWrite.equals("N"))) {
+            System.out.println("Oops! I didn't understand your input. Would you like to write to a file? (Y/N)");
+        }
+        if (toWrite.equals("Y")) {
+            File coefficients = new File("coefficients.txt"); //Initialize a txt file to store model outputs
+            if (!coefficients.exists()) { //Create a new output file if one does not already exist
+                try {
+                    coefficients.createNewFile();
+                } catch (IOException e) { //Terminate the program if a new file cannot be created
+                    System.err.println("Trouble writing to file! Check location and do not interrupt.");
+                    System.exit(9);
                 }
-                aBuffed.write(STR."\nphi\t\{phi}\nRSQ\t\{rsq}"); //Write the phi and rsq values to the file on their own lines
-                aBuffed.flush(); //Flush the file
-                aBuffed.close(); //Close the file
-            } catch (IOException e) { //Terminate the program if the file cannot be written to
-                System.err.println("Oops! Couldn't write to the file.");
             }
-        } else { //Terminate the program if the file to write to cannot be created or found
-            System.err.println("Cannot access file to write to!");
-            System.exit(11);
+            if (coefficients.exists() && coefficients.isFile() && coefficients.canWrite()) { //Check file existence, writeability, and file-ness
+                try {
+                    FileWriter aWrite = new FileWriter(coefficients); //Initialize file writer
+                    BufferedWriter aBuffed = new BufferedWriter(aWrite); //Initialized buffered writer
+                    for (int i = 0; i < a.length; i++) { //For each coefficient, write a new line containing the order of the coefficient and its value, separated by a tab
+                        String coefIndex = STR."a\{i}";
+                        aBuffed.write(STR."\{coefIndex}\t\{a[i][0]}\n");
+                    }
+                    aBuffed.write(STR."\nphi\t\{phi}\nRSQ\t\{rsq}"); //Write the phi and rsq values to the file on their own lines
+                    aBuffed.flush(); //Flush the file
+                    aBuffed.close(); //Close the file
+                    System.out.println("""
+                            File written as "coefficients.txt"! See you next time!""");
+                } catch (IOException e) { //Terminate the program if the file cannot be written to
+                    System.err.println("Oops! Couldn't write to the file.");
+                }
+            } else { //Terminate the program if the file to write to cannot be created or found
+                System.err.println("Cannot access file to write to!");
+                System.exit(11);
+            }
+        } else {
+            System.out.println("No problem! Thanks for using our modelling tool!");
         }
     }
 
@@ -250,7 +272,6 @@ public class Regression {
             for (int i = 0; i < rowsA; i++) {
                 for (int j = 0; j < colsB; j++) {
                     double entry = 0.0; //Initialize the entry to store in c[i][j]
-
                     for (int n = 0; n < colsA; n++) {
                         entry += a[i][n] * b[n][j]; //Sum the product of matrix members based on dimension n (colsA, rowsB) for some i,j
                     }
@@ -286,11 +307,8 @@ public class Regression {
                     maxRow = j;
                 }
             }
-
             swapRows(a, i, maxRow); //Swap current row with pivot row
             swapRows(aInv, i, maxRow); //Swap current row with pivot row
-
-
             Double pivot = a[i][i]; //Scale the row such that the diagonal element is 1
             if (pivot == 0.0) { //Terminate the program if the matrix is singular
                 throw new IllegalArgumentException("Matrix is singular");
@@ -299,7 +317,6 @@ public class Regression {
                 a[i][j] /= pivot; //Scale this row in the input matrix
                 aInv[i][j] /= pivot; //Update the inverted matrix
             }
-
             for (int k = 0; k < n; k++) { //Eliminate below the pivot element
                 if (k != i) {
                     Double factor = a[k][i];
@@ -310,7 +327,6 @@ public class Regression {
                 }
             }
         }
-
         return aInv;
     }
 
