@@ -131,7 +131,7 @@ public class Regression {
         Double[][] y = new Double[data.length][1]; //Initialize the y vector (actual data)
         Double[][] dataAveVec = new Double[data.length][1]; //Initialize "data mean" vector; populated entirely by mean of actual data
         double dataAve = 0.0; //Initialize data mean
-        List<Object> model = new ArrayList<Object>(); //Initialize object list to be populated with model outputs
+        List<Object> model = new ArrayList<>(); //Initialize object list to be populated with model outputs
         for (int i = 0; i < data.length; i++) { //Populate the y vector with provided data
             y[i][0] = data[i][1];
         }
