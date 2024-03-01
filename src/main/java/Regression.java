@@ -18,7 +18,7 @@ public class Regression {
         System.out.println("Checking input arguments...");
         ArrayList<String> dataLines = new ArrayList<>(); //ArrayList of lines read from the data file
         int order = 1; //Initializes the model order
-        if (args.length < 2) { //Terminates the program if not enough arguments are passed
+        if (args.length < 2) { //Terminates the program if no arguments are passed
             intro();
             System.exit(1);
         } else {
