@@ -9,7 +9,7 @@ import static java.lang.StringTemplate.STR;
 public class Regression {
 
     /**
-     * Main bodyof the function. Assigns passed arguments to variables and coordinates other functions in creating the model
+     * Main body of the function. Assigns passed arguments to variables and coordinates other functions in creating the model
      * @param args String array of length 2; entry 0 should contain the datafile path; entry 1 should contain the desired model order
      */
     public static void main(String[] args) {
@@ -100,7 +100,7 @@ public class Regression {
                 System.exit(9);
             }
         }
-        if (coefficients.exists() && coefficients.isFile() && coefficients.canWrite()) { //Check file existence, writeability, and file-ness
+        if (coefficients.exists() && coefficients.isFile() && coefficients.canWrite()) { //Check file existence, write-ability, and file-ness
             try {
                 FileWriter aWrite = new FileWriter(coefficients); //Initialize file writer
                 BufferedWriter aBuffed = new BufferedWriter(aWrite); //Initialized buffered writer
