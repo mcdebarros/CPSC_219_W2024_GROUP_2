@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Regression {
 
     /**
-     * Main bodyof the function. Assigns passed arguments to variables and coordinates other functions in creating the model
+     * Main body of the function. Assigns passed arguments to variables and coordinates other functions in creating the model
      * @param args String array of length 2; entry 0 should contain the datafile path; entry 1 should contain the desired model order
      */
     public static void main(String[] args) {
@@ -18,7 +18,7 @@ public class Regression {
         System.out.println("Checking input arguments...");
         ArrayList<String> dataLines = new ArrayList<>(); //ArrayList of lines read from the data file
         int order = 1; //Initializes the model order
-        if (args.length < 1) { //Terminates the program if no arguments are passed
+        if (args.length < 2) { //Terminates the program if not enough arguments are passed
             intro();
             System.exit(1);
         } else {
@@ -233,7 +233,7 @@ public class Regression {
                 systems and producing text-based output; we hope that in future versions, it will handle non-linear systems and produce graphical
                 outputs.
                 
-                If you're seeing this message, it's because you tried to boot the program without passing any arguments; hopefully you know what
+                If you're seeing this message, it's because you tried to boot the program without passing enough arguments; hopefully you know what
                 you need to use this program properly now!""");
     }
 
@@ -243,15 +243,20 @@ public class Regression {
      * @return the transposed matrix
      */
     public static Double[][] transposeMatrix(Double[][] matrixToTranspose) {
-        int y = Array.getLength(matrixToTranspose); //Y dimension of array
-        int x = Array.getLength(matrixToTranspose[0]); //X Dimension of array
-        Double[][] transposedMatrix = new Double[x][y]; //Initialize transposed matrix
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                transposedMatrix[i][j] = matrixToTranspose[j][i]; //Iterate through the input matrix and flip the indices in the output matrix
+        if (matrixToTranspose.length == 0) return matrixToTranspose; else {
+            int y = Array.getLength(matrixToTranspose); //Y dimension of array
+            int x = Array.getLength(matrixToTranspose[0]); //X Dimension of array
+
+            Double[][] transposedMatrix = new Double[x][y]; //Initialize transposed matrix
+
+            for (int i = 0; i < x; i++) {
+                for (int j = 0; j < y; j++) {
+                    transposedMatrix[i][j] = matrixToTranspose[j][i]; //Iterate through the input matrix and flip the indices in the output matrix
+                }
             }
+
+            return transposedMatrix;
         }
-        return transposedMatrix;
     }
 
     /**
