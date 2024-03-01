@@ -23,7 +23,7 @@ public class Regression {
             System.exit(1);
         } else {
             try {
-                order = Integer.parseInt(args[1]); //Assigns model order based on user arguments
+                order = Integer.parseInt(args[1]); //Assigns model order based on user argumentsDo
             } catch (NumberFormatException e) { //Terminates program if order passed is not an integer
                 intro();
                 System.exit(7);
