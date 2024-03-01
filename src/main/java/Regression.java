@@ -25,7 +25,7 @@ public class Regression {
             try {
                 order = Integer.parseInt(args[1]); //Assigns model order based on user arguments
             } catch (NumberFormatException e) { //Terminates program if order passed is not an integer
-                System.err.println("Order given is not an integer!");
+                intro();
                 System.exit(7);
             }
         }
