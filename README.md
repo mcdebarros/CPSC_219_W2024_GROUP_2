@@ -17,7 +17,7 @@ This Java program implements a simple linear least squares regression (LLSR) mod
 
 Example:
 ```bash
-java Regression data.txt 2
+java Regression quadratic_dataset.txt 2
 ```
 ## Requirements
 
