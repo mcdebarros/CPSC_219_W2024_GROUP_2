@@ -1,3 +1,12 @@
+/*
+The provided datafile, quadratic_dataset.txt, is a collection of 25,000 data points describing the function
+
+y = 2.5(x^2) - x + 3
+
+with added gaussian noise to simulate real life imprecision and inaccuracy in data collection. It is provided to
+demonstrate the size and scope of datasets this tool is capable of handling with great precision.
+ */
+
 //Import useful packages
 import java.io.*;
 import java.lang.reflect.Array;
